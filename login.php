@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login | Coding Projects Store</title>
+    <link rel="stylesheet" type="text/css" href="log.css">
+  </head>
+  <body>
+    <header>
+      <h1>Coding Projects Store</h1>
+    </header>
+    <main>
+      <h2>Login</h2>
+      <form>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Login">
+      </form>
+      <p>Don't have an account? <a href="signup.html">Sign up here</a>.</p>
+    </main>
+    <footer>
+      <p>&copy; 2023 Coding Projects Store. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
