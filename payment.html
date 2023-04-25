@@ -1,49 +1,31 @@
-<?php
-require_once('lib/encdec_paytm.php'); // Include Paytm encryption/decryption library
-
-$merchant_id = "YOUR_MERCHANT_ID";
-$merchant_key = "YOUR_MERCHANT_KEY";
-$website_url = "YOUR_WEBSITE_URL";
-
-$paytm_params = array();
-$paytm_params["MID"] = $merchant_id;
-$paytm_params["WEBSITE"] = $website_url;
-$paytm_params["ORDER_ID"] = "ORDER" . time();
-$paytm_params["CUST_ID"] = $_POST['name'];
-$paytm_params["INDUSTRY_TYPE_ID"] = "Retail";
-$paytm_params["CHANNEL_ID"] = "WEB";
-$paytm_params["TXN_AMOUNT"] = $_POST['amount'];
-$paytm_params["EMAIL"] = $_POST['email'];
-$paytm_params["MOBILE_NO"] = $_POST['phone'];
-
-$paytm_checksum = getChecksumFromArray($paytm_params, $merchant_key); // Generate Paytm checksum
-
-$paytm_params["CHECKSUMHASH"] = $paytm_checksum; // Add checksum to parameters array
-
-$paytm_url = "https://securegw.paytm.in/order/process"; // Paytm payment processing URL
-
-// Send payment request to Paytm API
-$curl = curl_init();
-curl_setopt_array($curl, array(
-    CURLOPT_URL => $paytm_url,
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => json_encode($paytm_params),
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => array(
-        "Content-Type: application/json"
-    ),
-));
-$response = curl_exec($curl);
-curl_close($curl);
-
-$response = json_decode($response, true); // Parse Paytm API response
-
-// Handle successful payment
-if ($response['STATUS'] == 'TXN_SUCCESS') {
-    // Redirect to success page
-    header('Location: success.html');
-} else {
-    // Redirect to error page
-    header('Location: error.html');
-}
-?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paytm Payment Page</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Paytm Payment Page</h1>
+        <form method="POST" action="process_payment.php">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" name="phone" id="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Payment Amount</label>
+                <input type="number" name="amount" id="amount" required>
+            </div>
+            <button type="submit">Pay with Paytm</button>
+        </form>
+    </div>
+</body>
+</html>
