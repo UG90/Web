@@ -1,34 +1,20 @@
 <?php
+	$name = $_POST['name'];
+	$email = $_POST['email'];
+	$password = $_POST['password'];
 
-// MySQL database credentials
-$host = "localhost";
-$username = "root";
-$password = "ft5afvaf";
-$dbname = "website";
-
-// Create connection
-$conn = mysqli_connect($host, $username, $password, $dbname);
-
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
-
-// Execute SQL query
-$sql = "SELECT * FROM your_table";
-$result = mysqli_query($conn, $sql);
-
-// Check if query returned results
-if (mysqli_num_rows($result) > 0) {
-    // Output data of each row
-    while($row = mysqli_fetch_assoc($result)) {
-        echo "id: " . $row["id"]. " - Name: " . $row["name"]. "<br>";
-    }
-} else {
-    echo "0 results";
-}
-
-// Close connection
-mysqli_close($conn);
-
+	// Database connection
+	$conn = new mysqli('localhost','root','ft5afvaf','web');
+	if($conn->connect_error){
+		echo "$conn->connect_error";
+		die("Connection Failed : ". $conn->connect_error);
+	} else {
+		$stmt = $conn->prepare("insert into info(name, email, password,) values(?, ?, ?,)");
+		$stmt->bind_param("sssssi", $name, $email, $password,);
+		$execval = $stmt->execute();
+		echo $execval;
+		echo "Registration successfully...";
+		$stmt->close();
+		$conn->close();
+	}
 ?>
